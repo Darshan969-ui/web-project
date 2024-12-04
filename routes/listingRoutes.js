@@ -6,7 +6,8 @@ const {
   getListingById,
   addListing,
   updateListing,
-  deleteListing,
+  getAirbnbFees,
+  deleteListing
 } = require('../controller/listingController'); // Import the controller functions
 
 router.get(
@@ -22,6 +23,7 @@ router.get(
 router.get('/list/:id', getListingById);
 router.post('/list', addListing);
 router.put('/list/:id', updateListing);
-// router.delete('/listings/:id', deleteListing);
+router.get("/list/fees/:id", getAirbnbFees);
+router.delete('/list/:id', deleteListing);
 
 module.exports = router;
