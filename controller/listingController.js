@@ -3,74 +3,124 @@ const { validationResult } = require("express-validator");
 
 // Get listings with pagination and filtering
 exports.getListings = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        message: "Invalid query parameters",
-        errors: errors.array(),
-      });
-    }
-    const { page = 1, perPage = 5, minimum_nights } = req.query;
-  
-    try {
-      const pageNumber = parseInt(page, 10);
-      const perPageNumber = parseInt(perPage, 10);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      message: "Invalid query parameters",
+      errors: errors.array(),
+    });
+  }
 
-      const query = {};
-  
-      // If minimum_nights filter is provided, validate and add to the query
-      if (minimum_nights) {
-        const minNights = Number(minimum_nights);
-        if (!isNaN(minNights)) {
-          query.minimum_nights = { $gte: minNights }; // Use a MongoDB query to find listings with minimum nights greater than or equal to the provided value
-        } else {
-          return res.status(400).json({ message: "Invalid minimum_nights value" });
-        }
-      }
-  
-      // Calculate pagination parameters
-      const skip = (pageNumber - 1) * perPageNumber;
-  
-      // Fetch listings based on pagination and filter
-      const listings = await listing.find(query)
-        .skip(skip)
-        .limit(perPageNumber);
-  
-      // Get total count of listings matching the query (for pagination metadata)
-      const totalListings = await listing.countDocuments(query);
-  
-      // Calculate total pages
-      const totalPages = Math.ceil(totalListings / perPageNumber);
-  
-      // Return paginated results
-      res.status(200).json({
-        listings,
-        pagination: {
-          totalListings,
-          totalPages,
-          currentPage: pageNumber,
-          perPage: perPageNumber,
-        },
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Error fetching listings", error: err.message });
+  const { page = 1, perPage = 6, minimum_nights } = req.query;
+
+  const pageNumber = parseInt(page, 10);
+  const perPageNumber = parseInt(perPage, 10);
+
+  // Validate page and perPage
+  if (isNaN(pageNumber) || pageNumber <= 0) {
+    return res.status(400).json({ message: "Invalid page number" });
+  }
+
+  if (isNaN(perPageNumber) || perPageNumber <= 0 || perPageNumber > 100) { // Maximum perPage limit
+    return res.status(400).json({ message: "Invalid perPage value" });
+  }
+
+  const query = {};
+
+  // If minimum_nights filter is provided, validate and add to the query
+  if (minimum_nights) {
+    const minNights = Number(minimum_nights);
+    if (isNaN(minNights)) {
+      return res.status(400).json({ message: "Invalid minimum_nights value" });
     }
+    query.minimum_nights = { $gte: minNights }; // MongoDB query to filter by minimum_nights
+  }
+
+  // Define the default sorting order
+  const sortOption = { 
+    availability_30: 1,  // First by availability_30
+    availability_60: 1,  // Then by availability_60
+    availability_90: 1,  // Then by availability_90
+    availability_365: 1, // Finally by availability_365
   };
-  
+
+  // Custom sorting logic: prioritize based on availability order and push zero values to the end
+  const customSort = (listing) => {
+    // Check availability and prioritize fields
+    let availability = listing.availability_30 > 0 ? 30 :
+                       listing.availability_60 > 0 ? 60 :
+                       listing.availability_90 > 0 ? 90 :
+                       listing.availability_365 > 0 ? 365 : null;
+
+    // If all availability values are zero, push it to the end
+    if (availability === null) {
+      availability = Infinity; // Move to the end
+    }
+
+    // Return listing with its priority (priority value is based on availability)
+    return {
+      ...listing,
+      availabilityPriority: availability
+    };
+  };
+
+  // Calculate pagination parameters
+  const skip = (pageNumber - 1) * perPageNumber;
+
+  try {
+    // Fetch listings based on pagination, filter, and sorting
+    const listings = await listing.find(query).lean()
+      .skip(skip)
+      .limit(perPageNumber)
+      .sort(sortOption);  // Apply default sorting by availability fields
+
+    // Apply custom sorting to prioritize availability fields
+    const sortedListings = listings.map(customSort);
+
+    // Sort listings by availability priority (move listings with all zero availability fields to the end)
+    const finalListings = sortedListings.sort((a, b) => a.availabilityPriority - b.availabilityPriority);
+
+    // Get total count of listings matching the query
+    const totalListings = await listing.countDocuments(query);
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalListings / perPageNumber);
+
+    const pagination = {
+      totalListings,
+      totalPages,
+      currentPage: pageNumber,
+      perPage: perPageNumber,
+    };
+
+    // Render listings page with pagination and listings data
+    res.render('listings', {
+      listings: finalListings,
+      pagination,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching listings", error: err.message });
+  }
+};
+
+
+
 exports.getListingById = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   try {
-    const listing = await listing.findById(id);
-    console.log(listing);
-    if (!listing) {
+    const foundListing = await listing.findById(id).lean(); // Assuming 'Listing' is your Mongoose model
+    if (!foundListing) {
       return res.status(404).json({ message: "Listing not found" });
     }
-    res.status(200).json(listing); // Send the listing as JSON
+    res.render('details.hbs', {
+      listing: foundListing,
+      title: foundListing.title || 'Listing Details', // Optional: Pass a title for the page
+    });
   } catch (err) {
     res.status(500).json({ message: "Error fetching listing", error: err });
   }
+  
 };
 
 exports.addListing = async (req, res) => {
@@ -81,10 +131,9 @@ exports.addListing = async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Error creating listing', error: error.message });
     }
-  };
+};
 
-
-  exports.updateListing = async (req, res) => {
+exports.updateListing = async (req, res) => {
     const { id } = req.params;
     try {
       const updatedData = await listing.findByIdAndUpdate(id, req.body, { new: true });

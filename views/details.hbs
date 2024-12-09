@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="property-details">
+  <header>
+    <h1>{{listing.name}}</h1>
+    <p>{{listing.location}}</p>
+    <div class="rating">
+      <span class="star-rating">{{listing.rating}} ★</span>
+      <span class="reviews">({{listing.reviews}} reviews)</span>
+    </div>
+  </header>
+
+  <section class="image-gallery">
+    <img src="{{listing.images.picture_url}}" alt="{{listing.name}}">
+  </section>
+
+  <section class="price-details">
+    <div class="price-info">
+      <h2>${{listing.price}} per night</h2>
+      <p>{{listing.check_in}} - {{listing.check_out}} | {{listing.guests}} guests</p>
+    </div>
+    <div class="reserve">
+      <button>Reserve</button>
+    </div>
+  </section>
+
+  <section class="property-info">
+    <h2>Property Details</h2>
+    <ul>
+      <li><strong>Description:</strong> {{listing.description}}</li>
+      <li><strong>Space:</strong> {{listing.space}}</li>
+      <li><strong>Neighborhood Overview:</strong> {{listing.neighborhood}}</li>
+      <li><strong>House Rules:</strong> {{listing.house_rules}}</li>
+      <li><strong>Property Type:</strong> {{listing.property_type}}</li>
+      <li><strong>Room Type:</strong> {{listing.room_type}}</li>
+      <li><strong>Bed Type:</strong> {{listing.bed_type}}</li>
+    </ul>
+  </section>
+
+  <section class="host-info">
+    <h2>Host Information</h2>
+    <ul>
+      <li><strong>Host:</strong> {{listing.host.name}}</li>
+      {{!-- <li><strong>Superhost:</strong> {{listing.host.superhost ? 'Yes' : 'No'}}</li> --}}
+      <li><strong>Response Time:</strong> {{listing.host.response_time}}</li>
+      <li><strong>Response Rate:</strong> {{listing.host.response_rate}}%</li>
+    </ul>
+  </section>
+
+  <section class="terms">
+    <h2>Terms & Conditions</h2>
+    <p>Free cancellation before {{listing.cancellation_date}} for a full refund.</p>
+  </section>
+
+</body>
+</html>

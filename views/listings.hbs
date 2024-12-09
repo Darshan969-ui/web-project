@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listings</title>
+  <!-- Link to the external CSS -->
+  <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <!-- Filter Form -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="input-group">
+          <!-- Dropdown for Minimum Nights -->
+          <select name="minimum_nights" class="form-control" id="minimum_nights">
+            <option value="">Select Minimum Nights</option>
+            <option value="1" {{#if (eq query.minimum_nights '1')}}selected{{/if}}>1</option>
+            <option value="2" {{#if (eq query.minimum_nights '2')}}selected{{/if}}>2</option>
+            <option value="3" {{#if (eq query.minimum_nights '3')}}selected{{/if}}>3</option>
+            <option value="5" {{#if (eq query.minimum_nights '5')}}selected{{/if}}>5</option>
+            <option value="7" {{#if (eq query.minimum_nights '7')}}selected{{/if}}>7</option>
+          </select>
+        </div>
+        <button id="clear-filter"> clear filter</button>
+      </div>
+    </div>
+
+    <!-- Listings -->
+    <div class="row" id="listing-cards">
+      {{#each listings}}
+        <div class="col-md-4 mb-4">
+         
+          <div class="card listing-card">
+            </a>
+            <!-- Image -->
+             <a href="list/{{this._id}}">
+            <img src="{{this.images.picture_url}}" alt="Listing Image">
+            </a>
+            <div class="card-body listing-card-body">
+              <!-- City and Country -->
+              <div class="listing-info">
+                <div>{{this.address.street}}</div>
+              </div>
+
+              <!-- Availability -->
+              <div class="listing-info">
+                <div>Availability: {{this.availability.availability_30}} days</div>
+              </div>
+
+              <!-- Review Score -->
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="listing-price">${{this.price}} CAD night</div>
+                <div class="badge bg-info">{{this.review_scores.review_scores_rating}} ⭐</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {{else}}
+        <div class="col-12">No listings found</div>
+      {{/each}}
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      {{#if pagination.totalPages}}
+        <nav aria-label="Page navigation">
+          <ul class="pagination">
+            <!-- Previous Page Button -->
+            {{#if (gt pagination.currentPage 1)}}
+              <li class="page-item">
+                <a class="page-link" href="/api/list?page=1&perPage=5&minimum_nights={{query.minimum_nights}}">Previous</a>
+              </li>
+            {{/if}}
+
+            <!-- Page Numbers -->
+            {{#each (range pagination.currentPage)}}
+              <li class="page-item {{#if (eq this pagination.currentPage)}}active{{/if}}">
+                <a class="page-link" href="/api/list?page={{this}}&perPage=5&minimum_nights={{query.minimum_nights}}">{{this}}</a>
+              </li>
+            {{/each}}
+
+            <!-- Next Page Button -->
+            {{#if (lt pagination.currentPage pagination.totalPages)}}
+              <li class="page-item">
+                <a class="page-link" href="/api/list/?page={{inc pagination.currentPage}}&perPage=5&minimum_nights={{query.minimum_nights}}">Next</a>
+              </li>
+            {{/if}}
+          </ul>
+        </nav>
+      {{else}}
+        <p>No pages available</p>
+      {{/if}}
+    </div>
+  </div>
+
+  <!-- Link to JS (assuming your JS file is in the 'public/js' directory) -->
+  <script >
+    document.addEventListener('DOMContentLoaded', function () {
+    // Get the dropdown element by ID
+    const dropdown = document.getElementById('minimum_nights');
+  
+    // Listen for a change event on the dropdown
+    dropdown.addEventListener('change', function () {
+      const minNights = this.value; // Get the selected value
+  
+      // Ensure that the URL is correctly formatted
+      const urlParams = new URLSearchParams(window.location.search);
+  
+      // Set page to 1 and perPage to 5
+      urlParams.set('page', 1);  // Reset to page 1
+      urlParams.set('perPage', 5);  // Set perPage to 5
+  
+      // If there is a value in the dropdown, add it to the URL
+      if (minNights) {
+        urlParams.set('minimum_nights', minNights); // Add to query
+      } else {
+        urlParams.delete('minimum_nights'); // Remove if no value is selected
+      }
+  
+      // Update the browser's URL without reloading the page
+      window.location.search = urlParams.toString();  // Change the URL
+    });
+  });
+  
+  </script>
+</body>
+</html>

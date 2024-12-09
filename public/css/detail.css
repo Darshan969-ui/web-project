@@ -1,0 +1,98 @@
+/* General body styling */
+.details-page {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header {
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+  }
+  
+  .images img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .details, .host-info, .address {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    color: #007bff;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+  
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  ul li:last-child {
+    border-bottom: none;
+  }
+  
+  strong {
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .host-info ul li, .address ul li {
+    padding-left: 20px;
+  }
+  
+  .details .amenities span {
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+  
+  .details .amenities {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .details ul li, .host-info ul li, .address ul li {
+    font-size: 1rem;
+  }
+  
+  @media screen and (max-width: 768px) {
+    header h1 {
+      font-size: 2rem;
+    }
+  
+    .details, .host-info, .address {
+      padding: 15px;
+    }
+  
+    .images img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  

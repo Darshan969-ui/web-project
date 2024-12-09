@@ -1,0 +1,259 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Airbnb API Documentation",
+        "version": "1.0.0",
+        "description": "API Documentation for Airbnb project using Swagger"
+    },
+    "host": "localhost:8000",
+    "schemes": ["http"],
+    "paths": {
+        "/api/list": {
+            "get": {
+                "summary": "Get a list of available listings",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Page number for pagination"
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Number of listings per page"
+                    },
+                    {
+                        "name": "minimum_nights",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "Minimum number of nights required"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of available listings",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "location": {
+                                        "type": "string"
+                                    },
+                                    "price_per_night": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a new listing",
+                "parameters": [
+                    {
+                        "name": "listing",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "location": {
+                                    "type": "string"
+                                },
+                                "price_per_night": {
+                                    "type": "number"
+                                },
+                                "minimum_nights": {
+                                    "type": "integer"
+                                }
+                            },
+                            "example": {
+                                "name": "Cozy Apartment",
+                                "location": "New York",
+                                "price_per_night": 100,
+                                "minimum_nights": 2
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Listing created successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/list/{listingId}": {
+            "get": {
+                "summary": "Get a single listing by ID",
+                "parameters": [
+                    {
+                        "name": "listingId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID of the listing"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Details of the listing",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "location": {
+                                    "type": "string"
+                                },
+                                "price_per_night": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update a listing",
+                "parameters": [
+                    {
+                        "name": "listingId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID of the listing"
+                    },
+                    {
+                        "name": "listing",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "location": {
+                                    "type": "string"
+                                },
+                                "price_per_night": {
+                                    "type": "number"
+                                },
+                                "minimum_nights": {
+                                    "type": "integer"
+                                }
+                            },
+                            "example": {
+                                "name": "Updated Apartment",
+                                "location": "Los Angeles",
+                                "price_per_night": 120,
+                                "minimum_nights": 3
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listing updated successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "location": {
+                                    "type": "string"
+                                },
+                                "price_per_night": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a listing by ID",
+                "parameters": [
+                    {
+                        "name": "listingId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID of the listing"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listing deleted successfully"
+                    },
+                    "404": {
+                        "description": "Listing not found"
+                    }
+                }
+            }
+        },
+        "/api/list/fees/{listingId}": {
+            "get": {
+                "summary": "Get fees for a specific listing",
+                "parameters": [
+                    {
+                        "name": "listingId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "ID of the listing"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fees for the listing",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "cleaning_fee": {
+                                    "type": "number"
+                                },
+                                "service_fee": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

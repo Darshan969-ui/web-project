@@ -1,0 +1,210 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.alert {
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.card-footer a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.card-footer a:hover {
+    color: #0056b3;
+}
+/* Styles for the Listing Cards */
+.listing-card {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  
+  .listing-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .listing-card-body {
+    padding: 20px;
+  }
+  
+  .listing-info {
+    font-size: 14px;
+    color: #6c757d;
+  }
+  
+  .listing-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #28a745;
+  }
+  
+  /* Pagination Styles */
+  .pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  
+  .pagination .page-item {
+    white-space: nowrap;
+  }
+  
+  .pagination .page-link {
+    padding: 10px;
+    text-align: center;
+    width: 40px;
+    font-size: 14px;
+  }
+
+/* General body styling */
+/* General styles */
+.property-details {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+  margin: 0;
+}
+
+header {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+header p {
+  color: #888;
+}
+
+.rating {
+  font-size: 1rem;
+  color: #ff9900;
+}
+
+.rating .star-rating {
+  font-weight: bold;
+}
+
+.image-gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.price-details {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.price-info h2 {
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.reserve button {
+  background-color: #ff5a5f;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reserve button:hover {
+  background-color: #ff3b3f;
+}
+
+.property-info, .host-info, .terms {
+  background-color: #ffffff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #007bff;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+ul li:last-child {
+  border-bottom: none;
+}
+
+strong {
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .price-details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reserve button {
+    width: 100%;
+    padding: 15px;
+  }
+}
