@@ -220,15 +220,35 @@ exports.addListing = async (req, res) => {
   }
 };
 
+exports.renderUpdateListing = async(req,res)=>{
+  const isLoggedIn = res.locals.isLoggedIn;
+  if(isLoggedIn){
+  const id = req.params.id;
+  console.log(id);
+  const foundListing = await listing.findById(id).lean();
+  console.log(foundListing);
+  if (!foundListing) {
+    return res.status(404).send('Airbnb not found');
+  }
+
+  res.render('updatelisting', { listing: foundListing});
+}
+else{
+  res.redirect('/auth/login');
+}
+}
+
 
 exports.updateListing = async (req, res) => {
     const { id } = req.params;
     try {
       const updatedData = await listing.findByIdAndUpdate(id, req.body, { new: true });
       if (!updatedData) {
+        const errorMessage =  'Listing not found';
+        res.render('error', { message: errorMessage });
         return res.status(404).json({ message: 'Listing not found' });
       }
-      res.status(200).json({ message: 'Listing updated successfully', listing: updatedData });
+      res.status(200).redirect(`/api/list/${id}`);
     } catch (error) {
       const errorMessage = err.message;
     res.render('error', { message: errorMessage });
@@ -238,6 +258,8 @@ exports.updateListing = async (req, res) => {
 
   exports.getAirbnbFees = async (req, res) => {
     const { id } = req.params;
+    const { startDate, endDate, numberOfGuests } = req.query; // Get user input from query params
+  
     try {
       const airbnb = await listing.findById(id, {
         price: 1,
@@ -249,17 +271,115 @@ exports.updateListing = async (req, res) => {
         bedroom_beds: 1,
         'address.street': 1,
       });
+  
       if (!airbnb) {
-        return res.status(404).json({ message: "Airbnb listing not found" });
+        const errorMessage = "Airbnb listing not found";
+        res.render('error', { message: errorMessage });
+       
       }
-      res.status(200).json(airbnb);
+  
+      // Check if all required parameters (startDate, endDate, numberOfGuests) are provided
+      if (!startDate || !endDate || !numberOfGuests) {
+        const errorMessage = "Missing required parameters (startDate, endDate, numberOfGuests)";
+        res.render('error', { message: errorMessage });
+      }
+  
+      // Parse dates
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+  
+      if (isNaN(start) || isNaN(end)) {
+        const errorMessage = "Invalid date format";
+        res.render('error', { message: errorMessage });
+      
+      }
+  
+      // Calculate the number of nights
+      const nights = (end - start) / (1000 * 3600 * 24); // Convert milliseconds to days
+  
+      // Calculate the cost
+      const pricePerNight = airbnb.price;
+      const totalPriceForNights = pricePerNight * nights;
+      const cleaningFee = airbnb.cleaning_fee;
+      const securityDeposit = airbnb.security_deposit;
+  
+      // Calculate extra people fee if applicable
+      let extraPeopleFee = 0;
+      if (numberOfGuests > airbnb.guests_included) {
+        extraPeopleFee = (numberOfGuests - airbnb.guests_included) * airbnb.extra_people;
+      }
+  
+      // Total cost calculation
+      const totalCost = totalPriceForNights + cleaningFee + securityDeposit + extraPeopleFee;
+  
+      // Send the response back with the calculated fees
+      res.status(200).render('checkout', {
+        title: "Fee Calculation",
+        totalCost: totalCost,
+        nights: nights,
+        startDate: startDate,
+        endDate: endDate,
+        numberOfGuests: numberOfGuests,
+        pricePerNight: pricePerNight,
+        totalPriceForNights: totalPriceForNights,
+        cleaningFee: cleaningFee,
+        securityDeposit: securityDeposit,
+        extraPeopleFee: extraPeopleFee,
+        guestFee: airbnb.guests_included * airbnb.price, // Optional: Show guest fees based on the number of guests
+        street: airbnb.address.street, // Address
+      });
+  
     } catch (err) {
       const errorMessage = err.message;
-    res.render('error', { message: errorMessage });
+      res.render('error', { message: errorMessage });
       console.error(err);
-     
     }
   };
+
+
+// New search route
+exports.searchlist = async (req, res) => {
+  const searchQuery = req.query.search || '';  // Capture search query from URL
+  const page = req.query.page || 1;  // Page number for pagination
+  const perPage = 5; // Number of results per page
+
+  let filter = {};
+  console.log(searchQuery);
+  if (searchQuery) {
+    // Build filter condition to search within 'address.street' and 'name'
+    filter = {
+      $or: [
+        { 'address.street': { $regex: searchQuery, $options: 'i' } }, // Case-insensitive search
+        { 'name': { $regex: searchQuery, $options: 'i' } }
+      ]
+    };
+  }
+
+  // Pagination logic
+  const limit = perPage;
+  const skip = (page - 1) * limit;
+
+  // Fetch search results from the database
+  try {
+    const list = await listing.find(filter).skip(skip).limit(limit);
+    const totalListings = await listing.countDocuments(filter);
+
+    // Render the 'listing' view with search results and pagination
+    res.render('listing', {
+      list,
+      query: searchQuery, // Pass search query to the view
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalListings / perPage),
+        totalListings
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching listings');
+  }
+};
+
 
   exports.deleteListing = async (req, res) => {
     const { id } = req.params;

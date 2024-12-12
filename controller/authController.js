@@ -69,6 +69,13 @@ exports.login = async (req, res) => {
         });
     }
 };
-exports.logout = async(req,res)=>{
-
-}
+exports.logout = async (req, res) => {
+    try {
+        // Clear the cookie
+        res.clearCookie('token'); 
+        res.status(200).redirect('/auth/login');
+    } catch (error) {
+        const errorMessage = error.message;
+        res.status(500).render('error', { message: errorMessage });
+    }
+};

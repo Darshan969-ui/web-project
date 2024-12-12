@@ -8,7 +8,9 @@ const {
   updateListing,
   getAirbnbFees,
   deleteListing,
-  renderCreateListingPage
+  renderCreateListingPage,
+  renderUpdateListing,
+  searchlist
 } = require('../controller/listingController'); // Import the controller functions
 
 router.get(
@@ -21,10 +23,11 @@ router.get(
     getListings
   );
 router.get('/list/create', renderCreateListingPage )
+router.get('/list/edit/:id', renderUpdateListing);
 router.get('/list/:id', getListingById);
 router.post('/list', addListing);
-router.put('/list/:id', updateListing);
+router.post('/list/:id', updateListing);
 router.get("/list/fees/:id", getAirbnbFees);
 router.delete('/list/:id', deleteListing);
-
+router.get('/list/search', searchlist);
 module.exports = router;

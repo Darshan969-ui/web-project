@@ -1,0 +1,131 @@
+
+<head>
+  <style>/* Container */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Title */
+h1 {
+  text-align: center;
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+/* Reservation Details */
+.reservation-details {
+  margin-bottom: 30px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.reservation-details p {
+  margin: 5px 0;
+}
+
+/* Fee Breakdown */
+.fee-breakdown {
+  margin-bottom: 30px;
+}
+
+.fee-breakdown h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.fee-breakdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.fee-breakdown table td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.fee-breakdown table td:first-child {
+  font-weight: bold;
+}
+
+/* Total Cost */
+.total-cost {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 1.5em;
+  color: #e63946;
+}
+
+/* Book Now Button */
+.book-now-button {
+  display: inline-block;
+  padding: 12px 20px;
+  background-color: #ff5a5f;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.book-now-button:hover {
+  background-color: #e44c4f;
+}
+</style>
+</head>
+
+  <div class="container">
+    <h1>Checkout</h1>
+
+    <!-- Reservation Details -->
+    <div class="reservation-details">
+      <p><strong>Reservation Dates:</strong> {{startDate}} to {{ endDate}}</p>
+      <p><strong>Number of Nights:</strong> {{ nights }} nights</p>
+      <p><strong>Number of Guests:</strong> {{ numberOfGuests }} guests</p>
+      <p><strong>Address:</strong> {{street }}</p>
+    </div>
+
+    <!-- Fee Breakdown -->
+    <div class="fee-breakdown">
+      <h2>Fee Breakdown</h2>
+      <table>
+        <tr>
+          <td><strong>Price per Night:</strong></td>
+          <td>${{ pricePerNight }}</td>
+        </tr>
+        <tr>
+          <td><strong>Total for Nights:</strong></td>
+          <td>${{ totalPriceForNights }}</td>
+        </tr>
+        <tr>
+          <td><strong>Cleaning Fee:</strong></td>
+          <td>${{ cleaningFee }}</td>
+        </tr>
+        <tr>
+          <td><strong>Security Deposit:</strong></td>
+          <td>${{ securityDeposit }}</td>
+        </tr>
+        <tr>
+          <td><strong>Extra People Fee:</strong></td>
+          <td>${{ extraPeopleFee }}</td>
+        </tr>
+        <tr>
+          <td><strong>Guest Fee:</strong></td>
+          <td>${{guestFee }}</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Total Cost -->
+    <div class="total-cost">
+      <h2><strong>Total Cost:</strong> ${{totalCost }}</h2>
+    </div>
+
+    <a href="commingsoon.html" class="book-now-button">Book Now</a>
+  </div>
+</html>

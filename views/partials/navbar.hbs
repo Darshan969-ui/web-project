@@ -7,9 +7,11 @@
     <div style="flex-grow: 1; max-width: 600px; margin: 0 20px;">
       <input 
         type="text" 
+        id="searchQuery" 
         placeholder="Search destinations, homes, experiences..." 
         style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 50px; outline: none; font-size: 14px;"
       />
+      <button class="btn btn-outline-success" id="searchButton" type="button">Search</button>
     </div>
     
     <!-- User Menu -->
@@ -27,7 +29,7 @@
       <div id="dropdown" style="display: none; position: absolute; top: 60px; right: 0; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 220px; z-index: 10;">
         {{#if isLoggedIn}}
           <a href="/api/list/create" style="display: block; padding: 10px 15px; text-decoration: none; color: #333; font-size: 14px;">Host an Experience</a>
-          <a href="/logout" style="display: block; padding: 10px 15px; text-decoration: none; color: #ff385c; font-size: 14px;">Log Out</a>
+          <a href="/auth/logout" style="display: block; padding: 10px 15px; text-decoration: none; color: #ff385c; font-size: 14px;">Log Out</a>
         {{else}}
           <a href="/auth/register" style="display: block; padding: 10px 15px; text-decoration: none; color: #333; font-size: 14px;">Sign Up</a>
           <a href="/auth/login" style="display: block; padding: 10px 15px; text-decoration: none; color: #333; font-size: 14px;">Log In</a>
@@ -57,4 +59,21 @@
       if (button) button.setAttribute('aria-expanded', 'false');
     }
   };
+
+  // Search functionality
+  document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchQuery');  // Corrected reference
+    const searchButton = document.getElementById('searchButton');
+
+    // Handle Search button click
+    searchButton.addEventListener('click', function () {
+      const searchQuery = searchInput.value.trim();
+      if (searchQuery) {
+        // Redirect to the new route with the search query
+        window.location.href = `/api/list/search?search=${encodeURIComponent(searchQuery)}`;
+      } else {
+        alert("Please enter a search term.");
+      }
+    });
+  });
 </script>

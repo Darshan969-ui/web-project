@@ -1,0 +1,132 @@
+<section
+  style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; padding: 20px;"
+>
+  <!-- Form starts here -->
+  <form
+    action="/api/list/{{listing._id}}" 
+    method="POST"
+    style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; width: 100%;"
+  >
+    <!-- Left side: Property Details Form -->
+    <div
+      style="flex: 1; min-width: 400px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"
+    >
+      <h2
+        style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px;"
+      >Update Listing</h2>
+
+      <!-- Property Name -->
+      <div style="margin-bottom: 20px;">
+        <label for="name" style="font-weight: bold;">Property Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="{{listing.name}}"
+          placeholder="Enter property name"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+
+      <!-- Property Type -->
+      <div style="margin-bottom: 20px;">
+        <label for="property-type" style="font-weight: bold;">Property Type</label>
+        <select
+          id="property-type"
+          name="property_type"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        >
+          <option value="house" {{#eq listing.property_type "house"}}selected{{/eq}}>House</option>
+          <option value="apartment" {{#eq listing.property_type "apartment"}}selected{{/eq}}>Apartment</option>
+          <option value="condo" {{#eq listing.property_type "condo"}}selected{{/eq}}>Condo</option>
+          <option value="villa" {{#eq listing.property_type "villa"}}selected{{/eq}}>Villa</option>
+          <option value="cabin" {{#eq listing.property_type "cabin"}}selected{{/eq}}>Cabin</option>
+        </select>
+      </div>
+
+      <!-- Accommodates -->
+      <div style="margin-bottom: 20px;">
+        <label for="accommodates" style="font-weight: bold;">Accommodates</label>
+        <input
+          type="number"
+          id="accommodates"
+          name="accommodates"
+          value="{{listing.accommodates}}"
+          placeholder="Maximum accommodates"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+
+      <!-- Address Fields -->
+      <div style="margin-bottom: 20px;">
+        <label for="street" style="font-weight: bold;">Street</label>
+        <input
+          type="text"
+          id="street"
+          name="street"
+          value="{{listing.address.street}}"
+          placeholder="Enter street address"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+
+      <!-- Country -->
+      <div style="margin-bottom: 20px;">
+        <label for="country" style="font-weight: bold;">Country</label>
+        <input  
+          type="text"
+          id="country"
+          name="country"
+          value="{{listing.address.country}}"
+          placeholder="Enter country"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+
+      <!-- Description -->
+      <div style="margin-bottom: 20px;">
+        <label for="description" style="font-weight: bold;">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          placeholder="Enter a description of your property"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        >{{listing.description}}</textarea>
+      </div>
+    </div>
+
+    <!-- Right side: Amenities and Pricing Form -->
+    <div
+      style="flex: 1; min-width: 400px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"
+    >
+      <h2
+        style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px;"
+      >Amenities and Pricing</h2>
+
+      <!-- Price -->
+      <div style="margin-bottom: 20px;">
+        <label for="price" style="font-weight: bold;">Price Per Night</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          value="{{listing.price}}"
+          placeholder="Enter price per night"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+      <!-- Other fields can be similarly filled dynamically -->
+    </div>
+
+    <!-- Submit Button -->
+    <div style="width: 100%; text-align: center; margin-top: 20px;">
+      <button
+        type="submit"
+        style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;"
+      >
+        Update Listing
+      </button>
+    </div>
+  </form>
+</section>
