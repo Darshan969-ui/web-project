@@ -1,0 +1,63 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .error-container {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            background-color: #f8d7da;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .error-container h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .error-container p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .error-container button {
+            padding: 10px 20px;
+            background-color: #721c24;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .error-container button:hover {
+            background-color: #501217;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Error</h1>
+        <p id="error-message">An unexpected error occurred.</p>
+        <button onclick="goBack()">Go Back</button>
+    </div>
+
+    <script>
+        function setError(message) {
+            document.getElementById('error-message').textContent = message;
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Example usage: set the error message
+        setError('The page you are looking for does not exist.');
+</script>

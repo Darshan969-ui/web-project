@@ -26,7 +26,8 @@ exports.register = async (req, res) => {
         await newUser.save();  // Save the user to the database
         res.render('auth/login', { msg: 'User created successfully, please login to access your account.' });
     } catch (err) {
-        res.status(500).json({ msg: 'Error creating user', error: err });
+        const errorMessage = 'Error creating user';
+        res.render('error', { message: errorMessage });
     }
 };
 exports.renderLogin = (req, res) => {
@@ -38,18 +39,16 @@ exports.login = async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).render('auth/login', { 
-                msg: 'User does not exist', 
-                msgType: 'error' 
-            });
+            const errorMessage = 'User does not exist';
+    res.render('error', { message: errorMessage });
+           
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).render('auth/login', { 
-                msg: 'Invalid credentials', 
-                msgType: 'error' 
-            });
+            const errorMessage = 'Invalid credentials.';
+    res.render('error', { message: errorMessage });
+           
         }
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });

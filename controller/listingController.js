@@ -9,10 +9,9 @@ const { v4: uuidv4 } = require('uuid');
 exports.getListings = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({
-      message: "Invalid query parameters",
-      errors: errors.array(),
-    });
+    const errorMessage = 'Invalid query parameters';
+    res.render('error', { message: errorMessage });
+
   }
 
   const { page = 1, perPage = 6, minimum_nights } = req.query;
@@ -103,8 +102,10 @@ exports.getListings = async (req, res) => {
       pagination,
     });
   } catch (err) {
+    const errorMessage = err.message;
+    res.render('error', { message: errorMessage });
     console.error(err);
-    res.status(500).json({ message: "Error fetching listings", error: err.message });
+
   }
 };
 
@@ -122,7 +123,8 @@ exports.getListingById = async (req, res) => {
       title: foundListing.title || 'Listing Details', // Optional: Pass a title for the page
     });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching listing", error: err });
+    const errorMessage = err.message;
+    res.render('error', { message: errorMessage });
   }
   
 };
@@ -138,9 +140,15 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 exports.renderCreateListingPage = (req, res) => {
+  const isLoggedIn = res.locals.isLoggedIn;
+  if(isLoggedIn){
   res.render('createlisting', {
     title: 'Create New Listing',
   });
+}
+else{
+  res.redirect('/auth/login');
+}
 };
 
 exports.addListing = async (req, res) => {
@@ -222,7 +230,9 @@ exports.updateListing = async (req, res) => {
       }
       res.status(200).json({ message: 'Listing updated successfully', listing: updatedData });
     } catch (error) {
-      res.status(500).json({ message: 'Error updating listing', error: error.message });
+      const errorMessage = err.message;
+    res.render('error', { message: errorMessage });
+
     }
   };
 
@@ -244,8 +254,10 @@ exports.updateListing = async (req, res) => {
       }
       res.status(200).json(airbnb);
     } catch (err) {
+      const errorMessage = err.message;
+    res.render('error', { message: errorMessage });
       console.error(err);
-      res.status(500).json({ message: "Error fetching Airbnb fees", error: err.message });
+     
     }
   };
 
@@ -258,7 +270,10 @@ exports.updateListing = async (req, res) => {
       }
       res.status(200).json({ message: "Airbnb listing deleted successfully" });
     } catch (err) {
+      
+      const errorMessage = err.message;
+    res.render('error', { message: errorMessage });
       console.error(err);
-      res.status(500).json({ message: "Error deleting Airbnb listing", error: err.message });
+      
     }
   };
