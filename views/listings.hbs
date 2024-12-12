@@ -4,126 +4,190 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Listings</title>
-  <!-- Link to the external CSS -->
+  <!-- Link to external CSS (Bootstrap for Modal, jQuery, and Font Awesome) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-kaW16a0t2YkD0z2nCmxa7quz5JjEvl6p6MkPslC0eP4Ahg5P6rrD5gFzZ31tFQOa6" crossorigin="anonymous">
   <link href="/css/styles.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-  <div class="container mt-5">
-    <!-- Filter Form -->
-    <div class="row mb-4">
-      <div class="col-md-6">
-        <div class="input-group">
-          <!-- Dropdown for Minimum Nights -->
-          <select name="minimum_nights" class="form-control" id="minimum_nights">
-            <option value="">Select Minimum Nights</option>
-            <option value="1" {{#if (eq query.minimum_nights '1')}}selected{{/if}}>1</option>
-            <option value="2" {{#if (eq query.minimum_nights '2')}}selected{{/if}}>2</option>
-            <option value="3" {{#if (eq query.minimum_nights '3')}}selected{{/if}}>3</option>
-            <option value="5" {{#if (eq query.minimum_nights '5')}}selected{{/if}}>5</option>
-            <option value="7" {{#if (eq query.minimum_nights '7')}}selected{{/if}}>7</option>
-          </select>
+
+  <!-- Filter Button to Open Modal -->
+  <div class="container my-4">
+    <button class="btn btn-primary" id="filterButton" data-bs-toggle="modal" data-bs-target="#filterModal">Filter Listings <span id="filterCount" class="badge bg-secondary d-none">0</span></button>
+  </div>
+
+  <!-- Modal for Filters -->
+  <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="filterModalLabel">Filter Listings</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <button id="clear-filter"> clear filter</button>
-      </div>
-    </div>
+        <div class="modal-body">
+          <!-- Filter Form -->
+          <form id="filterForm">
+            <div class="mb-3">
+              <label for="minimum_nights" class="form-label">Minimum Nights</label>
+              <select name="minimum_nights" class="form-control" id="minimum_nights">
+                <option value="">Select Minimum Nights</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+              </select>
+            </div>
 
-    <!-- Listings -->
-    <div class="row" id="listing-cards">
-      {{#each listings}}
-        <div class="col-md-4 mb-4">
-         
-          <div class="card listing-card">
-            </a>
-            <!-- Image -->
-             <a href="list/{{this._id}}">
-            <img src="{{this.images.picture_url}}" alt="Listing Image">
-            </a>
-            <div class="card-body listing-card-body">
-              <!-- City and Country -->
-              <div class="listing-info">
-                <div>{{this.address.street}}</div>
+            <div class="mb-3">
+              <label for="perPage" class="form-label">Listings per Page</label>
+              <!-- Slider for perPage with Label and Ellipsis -->
+              <div class="d-flex justify-content-between">
+                <span>5</span>
+                <span>10</span>
+                <span>15</span>
+                <span>20</span>
               </div>
-
-              <!-- Availability -->
-              <div class="listing-info">
-                <div>Availability: {{this.availability.availability_30}} days</div>
-              </div>
-
-              <!-- Review Score -->
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="listing-price">${{this.price}} CAD night</div>
-                <div class="badge bg-info">{{this.review_scores.review_scores_rating}} ⭐</div>
+              <input type="range" class="form-range" id="perPage" name="perPage" min="5" max="20" step="5" value="5">
+              <div class="text-center">
+                <span id="perPageValue">5</span> listings...
               </div>
             </div>
-          </div>
+
+            <div class="text-center">
+              <button type="button" class="btn btn-primary" id="applyFilters">Apply Filters</button>
+              <button type="button" class="btn btn-secondary" id="clearFilters">Clear Filters</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+          </form>
         </div>
-      {{else}}
-        <div class="col-12">No listings found</div>
-      {{/each}}
-    </div>
-
-    <!-- Pagination -->
-    <div class="pagination">
-      {{#if pagination.totalPages}}
-        <nav aria-label="Page navigation">
-          <ul class="pagination">
-            <!-- Previous Page Button -->
-            {{#if (gt pagination.currentPage 1)}}
-              <li class="page-item">
-                <a class="page-link" href="/api/list?page=1&perPage=5&minimum_nights={{query.minimum_nights}}">Previous</a>
-              </li>
-            {{/if}}
-
-            <!-- Page Numbers -->
-            {{#each (range pagination.currentPage)}}
-              <li class="page-item {{#if (eq this pagination.currentPage)}}active{{/if}}">
-                <a class="page-link" href="/api/list?page={{this}}&perPage=5&minimum_nights={{query.minimum_nights}}">{{this}}</a>
-              </li>
-            {{/each}}
-
-            <!-- Next Page Button -->
-            {{#if (lt pagination.currentPage pagination.totalPages)}}
-              <li class="page-item">
-                <a class="page-link" href="/api/list/?page={{inc pagination.currentPage}}&perPage=5&minimum_nights={{query.minimum_nights}}">Next</a>
-              </li>
-            {{/if}}
-          </ul>
-        </nav>
-      {{else}}
-        <p>No pages available</p>
-      {{/if}}
+      </div>
     </div>
   </div>
 
-  <!-- Link to JS (assuming your JS file is in the 'public/js' directory) -->
-  <script >
-    document.addEventListener('DOMContentLoaded', function () {
-    // Get the dropdown element by ID
-    const dropdown = document.getElementById('minimum_nights');
-  
-    // Listen for a change event on the dropdown
-    dropdown.addEventListener('change', function () {
-      const minNights = this.value; // Get the selected value
-  
-      // Ensure that the URL is correctly formatted
-      const urlParams = new URLSearchParams(window.location.search);
-  
-      // Set page to 1 and perPage to 5
-      urlParams.set('page', 1);  // Reset to page 1
-      urlParams.set('perPage', 5);  // Set perPage to 5
-  
-      // If there is a value in the dropdown, add it to the URL
-      if (minNights) {
-        urlParams.set('minimum_nights', minNights); // Add to query
-      } else {
-        urlParams.delete('minimum_nights'); // Remove if no value is selected
-      }
-  
-      // Update the browser's URL without reloading the page
-      window.location.search = urlParams.toString();  // Change the URL
+  <!-- Listings Section -->
+  <div class="row" id="listing-cards">
+    {{#each listings}}
+      <div class="col-md-4 mb-4">
+        <div class="card listing-card">
+          <a href="/api/list/{{this._id}}">
+            <img src="{{this.images.picture_url}}" alt="Listing Image">
+          </a>
+          <div class="card-body listing-card-body">
+            <div>{{this.address.street}}</div>
+            <div>Availability: {{this.availability.availability_30}} days</div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="listing-price">${{this.price}} CAD/night</div>
+              <div class="badge bg-info">{{this.review_scores.review_scores_rating}} ⭐</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{else}}
+      <div class="col-12">No listings found</div>
+    {{/each}}
+  </div>
+
+  <!-- Pagination Section -->
+  <div class="pagination">
+    {{#if pagination.totalPages}}
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          {{#if (gt pagination.currentPage 1)}}
+            <li class="page-item">
+              <a class="page-link" href="http://localhost:8000/api/list/?page=1&perPage={{query.perPage}}&minimum_nights={{query.minimum_nights}}">Previous</a>
+            </li>
+          {{/if}}
+          {{#each (range pagination.currentPage)}}
+            <li class="page-item {{#if (eq this pagination.currentPage)}}active{{/if}}">
+              <a class="page-link" href="http://localhost:8000/api/list/?page={{this}}&perPage={{query.perPage}}&minimum_nights={{query.minimum_nights}}">{{this}}</a>
+            </li>
+          {{/each}}
+          {{#if (lt pagination.currentPage pagination.totalPages)}}
+            <li class="page-item">
+              <a class="page-link" href="http://localhost:8000/api/list/?page={{inc pagination.currentPage}}&perPage={{query.perPage}}&minimum_nights={{query.minimum_nights}}">Next</a>
+            </li>
+          {{/if}}
+        </ul>
+      </nav>
+    {{else}}
+      <p>No pages available</p>
+    {{/if}}
+  </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const perPageSlider = document.getElementById('perPage');
+    const perPageValue = document.getElementById('perPageValue');
+    const minimumNights = document.getElementById('minimum_nights');
+    const filterCount = document.getElementById('filterCount');
+
+    // Get filters from URL parameters on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const minimumNightsValue = urlParams.get('minimum_nights');
+    const perPageValueFromUrl = urlParams.get('perPage') || '5';
+
+    // Set initial values based on URL params
+    if (minimumNightsValue) {
+      minimumNights.value = minimumNightsValue;
+    }
+    perPageSlider.value = perPageValueFromUrl;
+    perPageValue.textContent = perPageValueFromUrl;
+
+    // Show the filter count based on URL params
+    updateFilterCount();
+
+    // Update slider value display
+    perPageSlider.addEventListener('input', function () {
+      perPageValue.textContent = perPageSlider.value;
     });
+
+    // Handle Apply Filters button click
+    document.getElementById('applyFilters').addEventListener('click', function () {
+      const updatedUrlParams = new URLSearchParams();
+     updatedUrlParams.set('page', '1');
+      updatedUrlParams.set('perPage', '5'); 
+      if (minimumNights.value) {
+        updatedUrlParams.set('minimum_nights', minimumNights.value);
+      }
+      if (perPageSlider.value !== '5') {
+        updatedUrlParams.set('perPage', perPageSlider.value);
+      }
+
+      // Reload the page with the updated URL
+      window.location.href = `http://localhost:8000/api/list/?${updatedUrlParams.toString()}`;
+    });
+
+    // Handle Clear Filters button click
+    document.getElementById('clearFilters').addEventListener('click', function () {
+      // Redirect to the base URL with default filters
+      const baseUrl = 'http://localhost:8000/api/list/?page=1&perPage=5';
+      window.location.href = baseUrl;
+    });
+
+    // Function to update the filter count
+    function updateFilterCount() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const appliedFilters = [];
+
+      if (urlParams.get('minimum_nights')) {
+        appliedFilters.push('Minimum Nights');
+      }
+      if (urlParams.get('perPage') && urlParams.get('perPage') !== '5') {
+        appliedFilters.push('Listings per Page');
+      }
+
+      const filterCountText = appliedFilters.length;
+      if (filterCountText > 0) {
+        filterCount.textContent = filterCountText;
+        filterCount.classList.remove('d-none');
+      } else {
+        filterCount.classList.add('d-none');
+      }
+    }
   });
-  
-  </script>
+</script>
+
 </body>
 </html>

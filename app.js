@@ -13,15 +13,16 @@ const { connectDB } = require('./config/db');
 const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-
+const checkAuth = require('./middleware/authmiddleware');
  
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Middleware to parse and cookies
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(checkAuth);
 
 // Handlebars setup with .hbs extension
 app.engine(
@@ -40,17 +41,23 @@ app.engine(
             range: (totalPages) => {
               return Array.from({ length: totalPages }, (_, index) => index + 1); // Create an array [1, 2, ..., totalPages]
             },
-            allowProtoPropertiesByDefault: true, 
-            allowProtoMethodsByDefault: true
+            
         },
     })
 );
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.use((req, res, next) => {
+    console.log('isLoggedIn status:', req.isLoggedIn);
+    res.locals.isLoggedIn = req.isLoggedIn; // Pass isLoggedIn to all views
+    next();
+});
+
 // Routes
 app.use('/auth', authRoutes);
 app.use('/api', listingRoutes);
+
 
 // Error handling middleware
 app.use(errorMiddleware);

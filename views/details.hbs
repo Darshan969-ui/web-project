@@ -1,62 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{title}}</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body class="property-details">
-  <header>
-    <h1>{{listing.name}}</h1>
-    <p>{{listing.location}}</p>
-    <div class="rating">
-      <span class="star-rating">{{listing.rating}} ★</span>
-      <span class="reviews">({{listing.reviews}} reviews)</span>
-    </div>
-  </header>
+<main style="max-width: 1200px; margin: 20px auto; font-family: Arial, sans-serif;">
+    <!-- Name and Images -->
+    <section style="margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1 style="font-size: 32px; font-weight: bold; margin-bottom: 20px">{{listing.name}}</h1>
+            {{#if isLoggedIn}}
+            <div>
+                <button style="margin-right: 10px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Update</button>
+                <button style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px;">Delete</button>
+            </div>
+            {{/if}}
+        </div>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;">
+            <div style="flex: 1; max-width: 500px;">
+                <img src="{{listing.images.picture_url}}" alt="Image of {{listing.name}}" style="width: 100%; border-radius: 10px;">
+            </div>
+            <div style="flex: 2;">
+                <h2 style="font-size: 24px; font-weight: bold;">About This Place</h2>
+                <p style="margin-top: 10px;">{{listing.description}}</p>
+            </div>
+        </div>
+    </section>
 
-  <section class="image-gallery">
-    <img src="{{listing.images.picture_url}}" alt="{{listing.name}}">
-  </section>
+    <section style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: space-between; margin-top: 30px;">
+        <!-- Left side: Amenities Section -->
+        <div style="flex: 1; min-width: 300px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px;">What This Place Offers</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 10px;">
+                {{#each listing.amenities}}
+                <div style="text-align: center; font-size: 14px; color: #555; padding: 10px; border-radius: 5px; background-color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+                    <p style="margin: 0;">{{this}}</p>
+                </div>
+                {{/each}}
+            </div>
+        </div>
 
-  <section class="price-details">
-    <div class="price-info">
-      <h2>${{listing.price}} per night</h2>
-      <p>{{listing.check_in}} - {{listing.check_out}} | {{listing.guests}} guests</p>
-    </div>
-    <div class="reserve">
-      <button>Reserve</button>
-    </div>
-  </section>
+        <!-- Right side: Reservation Form -->
+        <div style="flex: 1; min-width: 300px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h2 style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px;">Reservation Details</h2>
+            <form id="reservation-form" style="margin-top: 20px;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1;">
+                        <label for="check-in" style="font-weight: bold;">Check-In</label>
+                        <input type="date" id="check-in" name="check-in" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;">
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="check-out" style="font-weight: bold;">Check-Out</label>
+                        <input type="date" id="check-out" name="check-out" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;">
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <label for="guests" style="font-weight: bold;">Guests</label>
+                    <input type="number" id="guests" name="guests" value="1" style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;">
+                </div>
+                <button type="submit" id="reserve-btn" style="margin-top: 30px; padding: 10px 20px; background-color: #ff385c; color: white; border: none; border-radius: 5px; width: 100%;">Reserve</button>
+            </form>
+            <p id="availability-msg" style="color: red; font-weight: bold; display: none;">Sorry, this property is not available for the selected dates.</p>
+        </div>
+    </section>
 
-  <section class="property-info">
-    <h2>Property Details</h2>
-    <ul>
-      <li><strong>Description:</strong> {{listing.description}}</li>
-      <li><strong>Space:</strong> {{listing.space}}</li>
-      <li><strong>Neighborhood Overview:</strong> {{listing.neighborhood}}</li>
-      <li><strong>House Rules:</strong> {{listing.house_rules}}</li>
-      <li><strong>Property Type:</strong> {{listing.property_type}}</li>
-      <li><strong>Room Type:</strong> {{listing.room_type}}</li>
-      <li><strong>Bed Type:</strong> {{listing.bed_type}}</li>
-    </ul>
-  </section>
+    <!-- Host Information -->
+    <section style="margin-bottom: 30px; margin-top: 30px;">
+        <h2 style="font-size: 24px; font-weight: bold;">About the Host</h2>
+        <div style="display: flex; gap: 15px;">
+            <img src="{{listing.host.host_picture_url}}" alt="Host Picture" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+            <div>
+                <p><strong>{{listing.host.host_name}}</strong></p>
+                <p>{{listing.host.host_about}}</p>
+                <a href="{{listing.host.host_url}}" target="_blank">View Host Profile</a>
+            </div>
+        </div>
+    </section>
 
-  <section class="host-info">
-    <h2>Host Information</h2>
-    <ul>
-      <li><strong>Host:</strong> {{listing.host.name}}</li>
-      {{!-- <li><strong>Superhost:</strong> {{listing.host.superhost ? 'Yes' : 'No'}}</li> --}}
-      <li><strong>Response Time:</strong> {{listing.host.response_time}}</li>
-      <li><strong>Response Rate:</strong> {{listing.host.response_rate}}%</li>
-    </ul>
-  </section>
+    <!-- Cancellation Policy and House Rules -->
+    <section style="margin-bottom: 30px;">
+        <h2 style="font-size: 24px; font-weight: bold;">Cancellation Policy</h2>
+        <p>{{listing.cancellation_policy}}</p>
+        <h2 style="font-size: 24px; font-weight: bold; margin-top: 20px;">House Rules</h2>
+        <p>{{listing.house_rules}}</p>
+    </section>
 
-  <section class="terms">
-    <h2>Terms & Conditions</h2>
-    <p>Free cancellation before {{listing.cancellation_date}} for a full refund.</p>
-  </section>
+    <!-- Reviews -->
+    <section style="margin-bottom: 30px;">
+        <h2 style="font-size: 24px; font-weight: bold;">Reviews</h2>
+        <div id="reviews-container">
+            {{#each listing.reviews}}
+            <div style="border-bottom: 1px solid #ddd; padding: 10px 0;">
+                <p><strong>{{this.reviewer_name}}</strong> - <span style="color: #ff385c;">{{rating}} ★</span></p>
+                <p>{{this.comments}}</p>
+            </div>
+            {{/each}}
+        </div>
 
-</body>
-</html>
+        {{#if (gt listing.reviews.length 10)}}
+        <button id="show-more-reviews" onclick="toggleReviews()">Show More</button>
+        {{/if}}
+    </section>
+</main>
+
+<script>
+function toggleAmenities() {
+    const amenitiesList = document.querySelectorAll('#amenities-list li:nth-child(n+11)');
+    amenitiesList.forEach(item => item.style.display = item.style.display === 'none' ? 'block' : 'none');
+}
+
+function toggleReviews() {
+    const reviewList = document.querySelectorAll('#reviews-container div:nth-child(n+11)');
+    reviewList.forEach(item => item.style.display = item.style.display === 'none' ? 'block' : 'none');
+}
+</script>

@@ -1,0 +1,273 @@
+<section
+  style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; padding: 20px;"
+>
+  <!-- Form starts here -->
+  <form
+    action="/api/list"
+    method="POST"
+    style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; width: 100%;"
+  >
+    <!-- Left side: Property Details Form -->
+    <div
+      style="flex: 1; min-width: 400px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"
+    >
+      <h2
+        style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px;"
+      >Create a Listing</h2>
+
+      <!-- Property Name -->
+      <div style="margin-bottom: 20px;">
+        <label for="name" style="font-weight: bold;">Property Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter property name"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+
+      <!-- Property Type -->
+      <div style="margin-bottom: 20px;">
+        <label for="property-type" style="font-weight: bold;">Property Type</label>
+        <select
+          id="property-type"
+          name="property_type"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        >
+          <option value="house">House</option>
+          <option value="apartment">Apartment</option>
+          <option value="condo">Condo</option>
+          <option value="villa">Villa</option>
+          <option value="cabin">Cabin</option>
+        </select>
+      </div>
+
+      <!-- Accommodates -->
+      <div style="margin-bottom: 20px;">
+        <label
+          for="accommodates"
+          style="font-weight: bold;"
+        >Accommodates</label>
+        <input
+          type="number"
+          id="accommodates"
+          name="accommodates"
+          placeholder="Maximum accommodates"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+
+      <!-- Address Fields -->
+      <div style="margin-bottom: 20px;">
+        <label for="street" style="font-weight: bold;">Street</label>
+        <input
+          type="text"
+          id="street"
+          name="street"
+          placeholder="Enter street address"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label for="country" style="font-weight: bold;">Country</label>
+        <input
+          type="text"
+          id="country"
+          name="country"
+          placeholder="Enter country"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label for="country-code" style="font-weight: bold;">Country Code</label>
+        <input
+          type="text"
+          id="country-code"
+          name="country_code"
+          placeholder="Enter country code"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+
+      <!-- Description -->
+      <div style="margin-bottom: 20px;">
+        <label for="description" style="font-weight: bold;">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          placeholder="Enter a description of your property"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        ></textarea>
+      </div>
+
+      <!-- House Rules -->
+      <div style="margin-bottom: 20px;">
+        <label for="house-rules" style="font-weight: bold;">House Rules</label>
+        <textarea
+          id="house-rules"
+          name="house_rules"
+          rows="4"
+          placeholder="Enter house rules"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Right side: Amenities and Pricing Form -->
+    <div
+      style="flex: 1; min-width: 400px; padding: 20px; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"
+    >
+      <h2
+        style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 20px;"
+      >Amenities and Pricing</h2>
+
+      <!-- Pricing Fields -->
+      <div style="margin-bottom: 20px;">
+        <label for="price" style="font-weight: bold;">Price Per Night</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          placeholder="Enter price per night"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label for="weekly-price" style="font-weight: bold;">Weekly Price</label>
+        <input
+          type="number"
+          id="weekly-price"
+          name="weekly_price"
+          placeholder="Enter weekly price"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label for="monthly-price" style="font-weight: bold;">Monthly Price</label>
+        <input
+          type="number"
+          id="monthly-price"
+          name="monthly_price"
+          placeholder="Enter monthly price"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label for="cleaning-fee" style="font-weight: bold;">Cleaning Fee</label>
+        <input
+          type="number"
+          id="cleaning-fee"
+          name="cleaning_fee"
+          placeholder="Enter cleaning fee"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label for="extra-people" style="font-weight: bold;">Extra People Fee</label>
+        <input
+          type="number"
+          id="extra-people"
+          name="extra_people"
+          placeholder="Enter extra people fee"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+      <div style="margin-bottom: 20px;">
+        <label for="guests-included" style="font-weight: bold;">Guests Included</label>
+        <input
+          type="number"
+          id="guests-included"
+          name="guests_included"
+          placeholder="Enter number of guests included"
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+
+      <!-- Amenities -->
+      <div style="margin-bottom: 20px;">
+        <label for="amenities" style="font-weight: bold;">Amenities</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+          <div>
+            <input type="checkbox" id="wifi" name="amenities" value="wifi" />
+            <label for="wifi">Wi-Fi</label>
+          </div>
+          <div>
+            <input type="checkbox" id="pool" name="amenities" value="pool" />
+            <label for="pool">Pool</label>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              id="parking"
+              name="amenities"
+              value="parking"
+            />
+            <label for="parking">Parking</label>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              id="air-conditioning"
+              name="amenities"
+              value="air-conditioning"
+            />
+            <label for="air-conditioning">Air Conditioning</label>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              id="kitchen"
+              name="amenities"
+              value="kitchen"
+            />
+            <label for="kitchen">Kitchen</label>
+          </div>
+          <div>
+            <input type="checkbox" id="tv" name="amenities" value="tv" />
+            <label for="tv">TV</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photos -->
+      <div style="margin-bottom: 20px;">
+        <label for="photos" style="font-weight: bold;">Upload Photos</label>
+        <input
+          type="file"
+          id="photos"
+          name="photos"
+          multiple
+          style="width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd;"
+        />
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div style="width: 100%; text-align: center; margin-top: 20px;">
+      <button
+        type="submit"
+        style="padding: 10px 20px; font-size: 16px; font-weight: bold; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;"
+      >
+        Submit Listing
+      </button>
+    </div>
+  </form>
+</section>
+<script>
+  document.querySelector("button[type='submit']").addEventListener("click",
+  function (event) { event.preventDefault(); // Prevent form submission for
+  validation const propertyName =
+  document.getElementById("property-name").value.trim(); const price =
+  document.getElementById("price").value.trim(); const description =
+  document.getElementById("description").value.trim(); const fileUpload =
+  document.getElementById("file-upload").files.length; let errors = []; if
+  (!propertyName) { errors.push("Property Name is required."); } if (!price) {
+  errors.push("Price is required."); } if (!description) {
+  errors.push("Description is required."); } if (fileUpload === 0) {
+  errors.push("File upload is required."); } if (errors.length > 0) {
+  alert(errors.join("\n")); } else { // Submit form if no errors alert("Listing
+  submitted successfully."); // You can uncomment this to actually submit the
+  form if using a form tag: // document.querySelector('form').submit(); } });
+</script>

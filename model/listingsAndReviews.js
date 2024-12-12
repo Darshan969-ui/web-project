@@ -3,16 +3,17 @@ const mongoose = require("mongoose");
 const airbnbListingSchema = new mongoose.Schema(
   {
     _id: {
-      type: String,
+      type: String,  
       required: true,
     },
+
     listing_url: {
       type: String,
-      required: true,
+      default: "",
     },
     name: {
       type: String,
-      required: true,
+      default: "",
     },
     summary: {
       type: String,
@@ -20,11 +21,11 @@ const airbnbListingSchema = new mongoose.Schema(
     },
     space: {
       type: String,
-      required: true,
+      default: "",
     },
     description: {
       type: String,
-      required: true,
+      default: "",
     },
     neighborhood_overview: {
       type: String,
@@ -36,47 +37,47 @@ const airbnbListingSchema = new mongoose.Schema(
     },
     house_rules: {
       type: String,
-      required: true,
+      default: "",
     },
     property_type: {
       type: String,
-      required: true,
+      default: "",
     },
     room_type: {
       type: String,
-      required: true,
+      default: "",
     },
     bed_type: {
       type: String,
-      required: true,
+      default: "",
     },
     minimum_nights: {
       type: Number,
-      required: true,
+      default: 1,
     },
     maximum_nights: {
       type: Number,
-      required: true,
+      default: 365,
     },
     cancellation_policy: {
       type: String,
-      required: true,
+      default: "",
     },
     bedrooms: {
       type: Number,
-      required: true,
+      default: 1,
     },
     beds: {
       type: Number,
-      required: true,
+      default: 1,
     },
     number_of_reviews: {
       type: Number,
-      required: true,
+      default: 0,
     },
     bathrooms: {
       type: Number,
-      required: true,
+      default: 1,
     },
     amenities: {
       type: [String],
@@ -84,7 +85,7 @@ const airbnbListingSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: true,
+      default: 0,
     },
     security_deposit: {
       type: Number,
@@ -100,7 +101,7 @@ const airbnbListingSchema = new mongoose.Schema(
     },
     guests_included: {
       type: Number,
-      required: true,
+      default: 1,
     },
     images: {
       thumbnail_url: {
@@ -113,7 +114,7 @@ const airbnbListingSchema = new mongoose.Schema(
       },
       picture_url: {
         type: String,
-        required: true,
+        default: "",
       },
       xl_picture_url: {
         type: String,
@@ -123,31 +124,31 @@ const airbnbListingSchema = new mongoose.Schema(
     host: {
       host_id: {
         type: String,
-        required: true,
+        default: "",
       },
       host_url: {
         type: String,
-        required: true,
+        default: "",
       },
       host_name: {
         type: String,
-        required: true,
+        default: "",
       },
       host_location: {
         type: String,
-        required: true,
+        default: "",
       },
       host_about: {
         type: String,
-        required: true,
+        default: "",
       },
       host_response_time: {
         type: String,
-        required: true,
+        default: "",
       },
       host_picture_url: {
         type: String,
-        required: true,
+        default: "",
       },
       host_neighbourhood: {
         type: String,
@@ -155,25 +156,25 @@ const airbnbListingSchema = new mongoose.Schema(
       },
       host_response_rate: {
         type: Number,
-        required: true,
+        default: 0,
       },
       host_has_profile_pic: {
         type: Boolean,
-        required: true,
+        default: false,
       },
       host_listings_count: {
         type: Number,
-        required: true,
+        default: 0,
       },
       host_total_listings_count: {
         type: Number,
-        required: true,
+        default: 0,
       },
     },
     address: {
       street: {
         type: String,
-        required: true,
+        default: "",
       },
       suburb: {
         type: String,
@@ -181,22 +182,21 @@ const airbnbListingSchema = new mongoose.Schema(
       },
       government_area: {
         type: String,
-        required: true,
+        default: "",
       },
       market: {
         type: String,
-        required: true,
+        default: "",
       },
       country: {
         type: String,
-        required: true,
+        default: "",
       },
       country_code: {
         type: String,
-        required: true,
+        default: "",
       },
     },
-    
   },
   { collection: "listingsAndReviews" }
 );

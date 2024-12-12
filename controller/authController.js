@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
         email,
         password: hashedPassword
     });
-
+    console.log(req.body);
     try {
         await newUser.save();  // Save the user to the database
         res.render('auth/login', { msg: 'User created successfully, please login to access your account.' });
@@ -57,9 +57,11 @@ exports.login = async (req, res) => {
 
         // res.render('listings.hbs', { 
         //     msg: 'Logged in successfully!', 
-        //     msgType: 'success' 
+        //     msgType: 'success',
+        //     isLoggedIn: req.isLoggedIn
         // });
-        res.redirect('/api/list?page=1&perPage=6');
+
+        res.redirect('/api/list?page=1&perPage=5');
 
     } catch (err) {
         res.status(500).render('auth/login', { 
@@ -68,3 +70,6 @@ exports.login = async (req, res) => {
         });
     }
 };
+exports.logout = async(req,res)=>{
+
+}

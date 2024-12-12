@@ -1,5 +1,9 @@
 const listing = require("../model/listingsAndReviews");
 const { validationResult } = require("express-validator");
+const multer = require('multer');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+
 
 // Get listings with pagination and filtering
 exports.getListings = async (req, res) => {
@@ -123,15 +127,91 @@ exports.getListingById = async (req, res) => {
   
 };
 
-exports.addListing = async (req, res) => {
-    try {
-      const newData = new listing(req.body);
-      await newData.save();
-      res.status(201).json({ message: 'Listing created successfully', listing: newData });
-    } catch (error) {
-      res.status(500).json({ message: 'Error creating listing', error: error.message });
-    }
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Folder to store images
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+  }
+});
+const upload = multer({ storage: storage });
+
+exports.renderCreateListingPage = (req, res) => {
+  res.render('createlisting', {
+    title: 'Create New Listing',
+  });
 };
+
+exports.addListing = async (req, res) => {
+  try {
+    // Retrieve form data from the request body 
+    const {
+      _id,
+      name, 
+      description, 
+      house_rules, 
+      property_type, 
+      cancellation_policy, 
+      amenities, 
+      price, 
+      security_deposit, 
+      cleaning_fee, 
+      extra_people, 
+      guests_included, 
+      images, 
+      host,
+      address,
+    } = req.body;
+
+    const listingImages = {
+      picture_url: images?.picture_url || "",
+    };
+    console.log(req.body);
+    const newListing = new listing({
+      _id: uuidv4(),
+      name,
+      description,
+      house_rules,
+      property_type,
+      cancellation_policy,
+      amenities: amenities || [],
+      price,
+      security_deposit,
+      cleaning_fee,
+      extra_people,
+      guests_included,
+      images: listingImages,
+      host: {
+        host_id: host?.host_id || "",
+        host_name: host?.host_name || "",
+        host_location: host?.host_location || "",
+        host_about: host?.host_about || "",
+        host_picture_url: host?.host_picture_url || "",
+      },
+      address: {
+        street: address?.street || "",
+        country: address?.country || "",
+        country_code: address?.country_code || "",
+      },
+    });
+    console.log(newListing);
+
+    await newListing.save();
+
+    // Respond with success
+    if(newListing){
+    res.status(201).json({ message: 'Listing created successfully!', listing: newListing });
+    }
+    else{
+      res.status(400).json({message:'chutiya'});
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error creating listing', error: error.message });
+  }
+};
+
 
 exports.updateListing = async (req, res) => {
     const { id } = req.params;
